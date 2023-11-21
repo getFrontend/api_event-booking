@@ -1,0 +1,15 @@
+{
+  "name": "api_event-booking",
+  "version": "1.0.0",
+  "description": "API for event booking site",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Sergey UP",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
