@@ -27,11 +27,12 @@ const startServer = async (req, res) => {
   if (!(await checkFiles())) {
     return;
   }
-  
+
   http
-  .createServer(async (req, res) => {
+    .createServer(async (req, res) => {
       const reqURL = new URL(req.url, `http://${req.headers.host}`);
       const pathName = req.utl.pathName;
+      const segments = req.utl.split('/');
 
       if (req.method === 'GET' && req.url === '/artists') {
         try {
