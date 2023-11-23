@@ -1,42 +1,36 @@
 import http from 'node:http';
 import fs from "node:fs/promises";
-import { COMEDIANS, checkFiles } from './checkFiles.js';
+import { CLIENTS, COMEDIANS, checkFile } from './checkFile.js';
 import { sendError } from './sendError.js';
-import { sendData } from './sendData.js';
+import { handleComediansRequest } from './handleComediansRequest.js';
 
 const PORT = 8080;
 
 export const startServer = async () => {
-  if (!(await checkFiles())) {
+  if (!(await checkFile(COMEDIANS))) {
     return;
   }
+
+  await checkFile(CLIENTS, true);
+
+  const comediansData = await fs.readFile(COMEDIANS, 'utf-8');
+  const comedians = JSON.parse(comediansData);
 
   http
     .createServer(async (req, res) => {
       try {
+        res.setHeader("access-Control-Allow-Origin", "*");
+
         const segments = req.url.split('/').filter(Boolean);
 
         if (req.method === 'GET' && segments[0] === 'artists') {
-          const comediansData = await fs.readFile(COMEDIANS, 'utf-8');
-          const comedians = JSON.parse(comediansData);
-
-          if (segments.length === 2) {
-            const comedian = comedians.find((c) => c.id === segments[1]);
-
-            if (!comedian) {
-              sendError(res, 404, 'Sorry, but this comedian is not found!')
-              return;
-            }
-
-            sendData(res, comedian);
-            return;
-          }
-          sendData(res, comedians);
+          handleComediansRequest(req, res, comedians, segments);
           return;
         }
 
         if (req.method === 'POST' && segments[0] === 'clients') {
-          console.log('Post: add client')
+          handleAddClient(req, res);
+          return;
         }
 
         if (
