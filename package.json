@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "API for event booking site",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "type": "module",
   "author": "Sergey UP",
   "license": "ISC",
   "devDependencies": {
