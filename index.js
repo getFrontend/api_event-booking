@@ -47,10 +47,10 @@ const startServer = async () => {
               return;
             }
 
-            sendData(res, comedians);
+            sendData(res, comedian);
             return;
           }
-          sendData(res, data);
+          sendData(res, comedians);
           return;
         }
 
