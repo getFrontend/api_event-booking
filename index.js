@@ -31,9 +31,8 @@ const startServer = async (req, res) => {
 
   http
     .createServer(async (req, res) => {
-      const reqURL = new URL(req.url, `${PROTOCOL}${req.headers.host}`);
-      const pathName = reqURL.pathname;
-      const segments = req.url.split('/');
+      const segments = req.url.split('/').filter(Boolean);
+      console.log('segments: ', segments);
 
       if (req.method === 'GET' && req.url === '/artists') {
         try {
