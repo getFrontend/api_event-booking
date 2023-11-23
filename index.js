@@ -1,11 +1,10 @@
 import http from 'node:http';
 import fs from "node:fs/promises";
-import { error } from 'node:console';
 
 const PORT = 8080;
 const COMEDIANS = 'data/comedians.json';
 const CLIENTS = 'data/clients.json';
-const PROTOCOL = 'http://'
+// const PROTOCOL = 'http://'
 
 const checkFiles = async () => {
   try {
@@ -57,8 +56,6 @@ const startServer = async () => {
           if (segments.length === 2) {
             const comedian = JSON.parse(data)
               .find((c) => c.id === segments[1]);
-
-            console.log(comedian)
 
             if (!comedian) {
               sendError(res, 404, 'Sorry, but this comedian is not found!')
