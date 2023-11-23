@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 const PORT = 8080;
 const COMEDIANS = 'data/comedians.json';
 const CLIENTS = 'data/clients.json';
+const PROTOCOL = 'http://'
 
 const checkFiles = async () => {
   try {
@@ -30,9 +31,9 @@ const startServer = async (req, res) => {
 
   http
     .createServer(async (req, res) => {
-      const reqURL = new URL(req.url, `http://${req.headers.host}`);
-      const pathName = req.utl.pathName;
-      const segments = req.utl.split('/');
+      const reqURL = new URL(req.url, `${PROTOCOL}${req.headers.host}`);
+      const pathName = reqURL.pathname;
+      const segments = req.url.split('/');
 
       if (req.method === 'GET' && req.url === '/artists') {
         try {
