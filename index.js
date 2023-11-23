@@ -1,5 +1,6 @@
 import http from 'node:http';
 import fs from "node:fs/promises";
+import { error } from 'node:console';
 
 const PORT = 8080;
 const COMEDIANS = 'data/comedians.json';
@@ -16,43 +17,84 @@ const checkFiles = async () => {
 
   try {
     await fs.access(CLIENTS);
-    return true;
   } catch (error) {
     await fs.writeFile(CLIENTS, JSON.stringify([]));
     console.log(`File ${CLIENTS} was sucssessfully created`)
     return false;
   }
+
+  return true;
 }
 
-const startServer = async (req, res) => {
+const sendData = (res, data) => {
+  res.writeHead(200, {
+    "Content-Type": "text/json; charset=utf-8",
+    "Access-Control-Allow-Origin": "*"
+  });
+  res.end(data);
+}
+
+const sendError = (res, statusCode, errMessage) => {
+  res.writeHead(statusCode, {
+    "Content-Type": "text/plain; charset=utf-8"
+  })
+  res.end(errMessage);
+}
+
+const startServer = async () => {
   if (!(await checkFiles())) {
     return;
   }
 
   http
     .createServer(async (req, res) => {
-      const segments = req.url.split('/').filter(Boolean);
-      console.log('segments: ', segments);
+      try {
+        const segments = req.url.split('/').filter(Boolean);
 
-      if (req.method === 'GET' && req.url === '/artists') {
-        try {
+        if (req.method === 'GET' && segments[0] === 'artists') {
           const data = await fs.readFile(COMEDIANS, 'utf-8');
-          res.writeHead(200, {
-            "Content-Type": "text/json; charset=utf-8",
-            "Access-Control-Allow-Origin": "*",
-          });
-          res.end(data);
-        } catch (error) {
-          res.writeHead(500, {
-            "Content-Type": "text/plain; charset=utf-8",
-          });
-          res.end(`Server Error: ${error}`);
+
+          if (segments.length === 2) {
+            const comedian = JSON.parse(data)
+              .find((c) => c.id === segments[1]);
+
+            console.log(comedian)
+
+            if (!comedian) {
+              sendError(res, 404, 'Sorry, but this comedian is not found!')
+              return;
+            }
+
+            sendData(res, JSON.stringify(comedian));
+            return;
+          }
+          sendData(res, data);
+          return;
         }
-      } else {
-        res.writeHead(404, {
-          "Content-Type": "text/json; charset=utf-8",
-        });
-        res.end('404: page is not found')
+
+        if (req.method === 'POST' && segments[0] === 'clients') {
+          console.log('Post: add client')
+        }
+
+        if (
+          req.method === 'GET' &&
+          segments[0] === 'clients' &&
+          segments.length === 2
+        ) {
+          console.log('Get: get client by ticket number')
+        }
+
+        if (
+          req.method === 'PATCH' &&
+          segments[0] === 'clients' &&
+          segments.length === 2
+        ) {
+          console.log('Patch: update client by ticket number')
+        }
+
+        sendError(res, 404, '404: page is not found');
+      } catch (error) {
+        sendError(res, 500, `Server Error: ${error}`)
       }
     })
     .listen(PORT);
