@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import { CLIENTS, COMEDIANS, checkFile } from './checkFile.js';
 import { sendError } from './sendError.js';
 import { handleComediansRequest } from './handleComediansRequest.js';
+import { handleAddClient } from './handleAddClient.js';
 
 const PORT = 8080;
 
@@ -47,6 +48,8 @@ export const startServer = async () => {
           segments.length === 2
         ) {
           console.log('Patch: update client by ticket number')
+          handleUpdateClients(req, res, segments);
+          return;
         }
 
         sendError(res, 404, '404: page is not found');
