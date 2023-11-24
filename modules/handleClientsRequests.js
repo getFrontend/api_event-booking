@@ -1,6 +1,6 @@
-import { CLIENTS } from "./checkFile";
-import { sendData } from "./sendData";
-import { sendError } from "./sendError";
+import { CLIENTS } from "./checkFile.js";
+import { sendData } from "./sendData.js";
+import { sendError } from "./sendError.js";
 import fs from 'node:fs/promises';
 
 export const handleClientsRequests = async (req, res, ticketNumber) => {
