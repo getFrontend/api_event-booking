@@ -30,6 +30,7 @@ export const startServer = async () => {
         }
 
         if (req.method === 'POST' && segments[0] === 'clients') {
+
           handleAddClient(req, res);
           return;
         }
