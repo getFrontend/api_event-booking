@@ -4,7 +4,7 @@ import { sendError } from "./sendError.js";
 import fs from 'node:fs/promises';
 
 export const handleAddClient = (req, res) => {
-  let body = `""`;
+  let body = '';
 
   try {
     req.on('data', chunk => {
@@ -23,21 +23,23 @@ export const handleAddClient = (req, res) => {
       if (
         !newClient.fullName ||
         !newClient.phone ||
-        !newClient.ticketNumber
+        !newClient.ticketNumber ||
+        !newClient.booking
       ) {
         sendError(res, 400, `Вибачте, але ваші дані невірні!`);
         return;
       }
 
-      if (!newClient.booking) {
-        sendError(res, 400, 'Список бронювань відсутній');
-        return;
-      } else if (
-        !Array.isArray(newClient.booking) ||
-        !newClient.booking.every(item => item.comedian && item.time)
+      if (
+        newClient.booking &&
+        (!newClient.booking.length ||
+          !Array.isArray(newClient.booking) &&
+          !newClient.booking.every((item) => item.comedian && item.time))
       ) {
-        sendError(res, 400, `Вибачте, але дані були заповнені не до кінця`);
+        sendError(res, 400, `Вибачте, але дані бронювання не вірні`);
+        return;
       }
+
       const cliendData = await fs.readFile(CLIENTS, 'utf8');
       const clients = JSON.parse(cliendData);
 
