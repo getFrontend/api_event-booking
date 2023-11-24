@@ -4,6 +4,7 @@ import { CLIENTS, COMEDIANS, checkFile } from './checkFile.js';
 import { sendError } from './sendError.js';
 import { handleComediansRequest } from './handleComediansRequest.js';
 import { handleAddClient } from './handleAddClient.js';
+import { handleClientsRequests } from './handleClientsRequests.js';
 
 const PORT = 8080;
 
@@ -40,7 +41,9 @@ export const startServer = async () => {
           segments[0] === 'clients' &&
           segments.length === 2
         ) {
-          console.log('Get: get client by ticket number')
+          const ticket = segments[1];
+          handleClientsRequests(req, res, ticket);
+          return;
         }
 
         if (
