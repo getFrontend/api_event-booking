@@ -5,6 +5,7 @@ import { sendError } from './sendError.js';
 import { handleComediansRequest } from './handleComediansRequest.js';
 import { handleAddClient } from './handleAddClient.js';
 import { handleClientsRequests } from './handleClientsRequests.js';
+import { handleUpdateClient } from './handleUpdateClient.js';
 
 const PORT = 8080;
 
@@ -52,7 +53,7 @@ export const startServer = async () => {
           segments.length === 2
         ) {
           console.log('Patch: update client by ticket number')
-          handleUpdateClients(req, res, segments);
+          handleUpdateClient(req, res, segments);
           return;
         }
 
