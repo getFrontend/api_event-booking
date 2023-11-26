@@ -7,9 +7,9 @@ import { handleAddClient } from './handleAddClient.js';
 import { handleClientsRequests } from './handleClientsRequests.js';
 import { handleUpdateClient } from './handleUpdateClient.js';
 
-const PORT = 8080;
+export const PORT = 8080;
 
-export const startServer = async () => {
+export const startServer = async (port) => {
   if (!(await checkFile(COMEDIANS))) {
     return;
   }
@@ -19,7 +19,7 @@ export const startServer = async () => {
   const comediansData = await fs.readFile(COMEDIANS, 'utf-8');
   const comedians = JSON.parse(comediansData);
 
-  http
+  const server = http
     .createServer(async (req, res) => {
       try {
         res.setHeader("access-Control-Allow-Origin", "*");
@@ -61,8 +61,9 @@ export const startServer = async () => {
       } catch (error) {
         sendError(res, 500, `Server Error: ${error}`)
       }
-    })
-    .listen(PORT);
+    });
 
-  console.log(`Server is running on http://localhost:${PORT}`);
-}
+  server.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+};

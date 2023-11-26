@@ -1,7 +1,7 @@
 import { startServer } from './modules/startServer.js'
 
 const init = () => {
-  startServer();
+  startServer(PORT);
 }
 
 init();
