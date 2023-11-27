@@ -48,7 +48,7 @@ export const startServer = async (port) => {
         }
 
         if (
-          req.method === 'PATCH' &&
+          req.method === 'PUT' &&
           segments[0] === 'clients' &&
           segments.length === 2
         ) {
