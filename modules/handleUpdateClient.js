@@ -51,10 +51,12 @@ export const handleUpdateClient = (req, res, segments) => {
         return;
       }
 
-      clients[clientIndex] = {
-        ...clients[clientIndex],
-        ...updateClientData
-      }
+      // clients[clientIndex] = {
+      //   ...clients[clientIndex],
+      //   ...updateClientData
+      // }
+
+      Object.assign(clients[clientIndex], updateClientData);
 
       await fs.writeFile(CLIENTS, JSON.stringify(clients));
       sendData(res, clients[clientIndex]);
