@@ -1,6 +1,6 @@
 import http from 'node:http';
 import fs from "node:fs/promises";
-import { CLIENTS, COMEDIANS, checkFile } from './checkFile.js';
+import { CLIENTS, COMEDIANS, checkFileExist, createFileIfNotExist } from './checkFile.js';
 import { sendError } from './sendError.js';
 import { handleComediansRequest } from './handleComediansRequest.js';
 import { handleAddClient } from './handleAddClient.js';
@@ -10,11 +10,11 @@ import { handleUpdateClient } from './handleUpdateClient.js';
 export const PORT = 8080;
 
 export const startServer = async (port) => {
-  if (!(await checkFile(COMEDIANS))) {
+  if (!(await checkFileExist(COMEDIANS))) {
     return;
   }
 
-  await checkFile(CLIENTS, true);
+  await createFileIfNotExist(CLIENTS, true);
 
   const comediansData = await fs.readFile(COMEDIANS, 'utf-8');
   const comedians = JSON.parse(comediansData);
