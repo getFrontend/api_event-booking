@@ -8,7 +8,7 @@ export const handleUpdateClient = (req, res, segments) => {
   const ticketNumber = segments[1];
 
   try {
-    req.on('data', chunk => {
+    req.on('data', (chunk) => {
       body += chunk;
     });
   } catch (error) {
