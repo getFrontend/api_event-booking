@@ -26,12 +26,19 @@ export const startServer = async (port) => {
 
         const segments = req.url.split('/').filter(Boolean);
 
-        if (req.method === 'GET' && segments[0] === 'artists') {
-          handleComediansRequest(req, res, comedians, segments);
+        if (!segments.length) {
+          sendError(res, 404, 'Не знайдено');
           return;
         }
 
-        if (req.method === 'POST' && segments[0] === 'clients') {
+        const [resource, id] = segments;
+
+        if (req.method === 'GET' && resource === 'artists') {
+          handleComediansRequest(req, res, comedians, id);
+          return;
+        }
+
+        if (req.method === 'POST' && resource === 'clients') {
 
           handleAddClient(req, res);
           return;
@@ -39,21 +46,19 @@ export const startServer = async (port) => {
 
         if (
           req.method === 'GET' &&
-          segments[0] === 'clients' &&
+          resource === 'clients' &&
           segments.length === 2
         ) {
-          const ticket = segments[1];
-          handleClientsRequests(req, res, ticket);
+          handleClientsRequests(req, res, id);
           return;
         }
 
         if (
           req.method === 'PUT' &&
-          segments[0] === 'clients' &&
+          resource === 'clients' &&
           segments.length === 2
         ) {
-          console.log('Patch: update client by ticket number')
-          handleUpdateClient(req, res, segments);
+          handleUpdateClient(req, res, id);
           return;
         }
 
