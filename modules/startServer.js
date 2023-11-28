@@ -19,7 +19,7 @@ export const startServer = async (port) => {
   const comediansData = await fs.readFile(COMEDIANS, 'utf-8');
   const comedians = JSON.parse(comediansData);
 
-  const server = http
+  http
     .createServer(async (req, res) => {
       try {
         res.setHeader("access-Control-Allow-Origin", "*");
@@ -61,9 +61,8 @@ export const startServer = async (port) => {
       } catch (error) {
         sendError(res, 500, `Server Error: ${error}`)
       }
+    })
+    .listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
     });
-
-  server.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-  });
 };
