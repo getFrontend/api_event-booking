@@ -19,7 +19,7 @@ export const createFileIfNotExist = async (path) => {
     await fs.access(path);
   } catch (error) {
     console.error(error);
-    await fdatasync.writeFile(path, JSON.stringify([]));
+    await fs.writeFile(path, JSON.stringify([]));
     console.log(`File ${path} was successfully created!`);
     return true;
   }
