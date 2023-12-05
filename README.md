@@ -1,5 +1,5 @@
 ## About
-API for event booking site
+API for event booking site, using Node JS.
 
 ### NPM packages
 * [Nodemon](https://www.npmjs.com/package/nodemon)
